@@ -1,6 +1,11 @@
+nav .brand-logo {
+    padding: 2px;
+    height: 100%;
+}
+
 .brand-logo img {
-    height: 58px;
-    margin: 2px;
+    height: 100%;
+    object-fit: contain;
 }
 
 h1, h2, h3, h4, h5, h6, h7 {
