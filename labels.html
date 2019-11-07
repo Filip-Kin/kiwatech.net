@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <style>
+            @page {
+                size: 8.5in 11in;
+            }
+            body {
+                width: 8.5in;
+                height: 11in;
+                margin: 1in;
+                padding: 0;
+            }
+            div.label {
+                display: inline-block;
+                width: 4in;
+                height: 1in;
+            }
+            img.label {
+                width: 4in;
+            }
+            span.text {
+                position: relative;
+                left: .99in;
+                bottom: .51in;
+                font-family: monospace;
+                font-size: .15in;
+            }
+            div.barcode-container {
+                position: relative;
+                bottom: .525in;
+                left: 1in;
+                height: .28in;
+                width: 2.75in;
+                overflow: hidden;
+            }
+            img.barcode {
+                width: 2.75in;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="labels">
+
+        </div>
+        <script>
+            function pad(n, width, z) {
+                z = z || '0';
+                n = n + '';
+                return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+            }
+
+            function base(parent) {
+                let labelC = document.createElement('div');
+                labelC.classList.add('label');
+                parent.appendChild(labelC);
+                return labelC
+            }
+
+            function label(parent) {
+                let labelI = document.createElement('img');
+                labelI.classList.add('label');
+                labelI.src = './img/label.png';
+                let labelC = base(parent)
+                labelC.appendChild(labelI);
+                return labelC;
+            }
+
+            function barcode(parent, sn) {
+                let code = 'KTPC' + pad(sn, 4) + '-' + Math.floor(Math.random()*16777215).toString(16);
+                let text = document.createElement('span');
+                text.classList.add('text');
+                text.innerHTML = code;
+                parent.appendChild(text);
+                let barcodeC = document.createElement('div');
+                let barcode = document.createElement('img');
+                barcodeC.classList.add('barcode-container');
+                barcode.classList.add('barcode');
+                barcode.src = 'https://barcode.tec-it.com/barcode.ashx?data='+code;
+                barcodeC.appendChild(barcode);
+                parent.appendChild(barcodeC);
+            }
+
+            let container = document.getElementById('labels');
+            let startNumber = parseInt(window.location.href.split('start=')[1]);
+
+            if (window.location.href.includes('barcodelabel')) {
+                for (let i = 0; i < 22; i++) {
+                    barcode(label(container), i+startNumber);
+                }
+            } else if (window.location.href.includes('=label')) {
+                for (let i = 0; i < 22; i++) {
+                    label(container);
+                }
+            } else {
+                for (let i = 0; i < 22; i++) {
+                    barcode(base(container), i+startNumber);
+                }
+            }
+        </script>
+    </body>
+</html>
