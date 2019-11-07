@@ -38,6 +38,10 @@
             img.barcode {
                 width: 2.75in;
             }
+            div.divider {
+                border: 1px dashed grey;
+                margin: .35in;
+            }
         </style>
     </head>
     <body>
@@ -67,7 +71,10 @@
             }
 
             function barcode(parent, sn) {
-                let code = 'KTPC' + pad(sn, 4) + '-' + Math.floor(Math.random()*16777215).toString(16);
+                let code = 'KTPC' + pad(sn, 4);
+                let rand = Math.floor(Math.random()*16777215).toString(16);
+                codes[code] = rand
+                code += '-'+rand;
                 let text = document.createElement('span');
                 text.classList.add('text');
                 text.innerHTML = code;
@@ -83,19 +90,25 @@
 
             let container = document.getElementById('labels');
             let startNumber = parseInt(window.location.href.split('start=')[1]);
+            let codes = {};
 
             if (window.location.href.includes('barcodelabel')) {
-                for (let i = 0; i < 22; i++) {
+                for (let i = 0; i < 20; i++) {
+                    if (i===10) container.innerHTML += '<div class="divider"></div>';
                     barcode(label(container), i+startNumber);
                 }
+                console.log(codes);
             } else if (window.location.href.includes('=label')) {
-                for (let i = 0; i < 22; i++) {
+                for (let i = 0; i < 20; i++) {
+                    if (i===10) container.innerHTML += '<div class="divider"></div>';
                     label(container);
                 }
             } else {
-                for (let i = 0; i < 22; i++) {
+                for (let i = 0; i < 20; i++) {
+                    if (i===10) container.innerHTML += '<div class="divider"></div>';
                     barcode(base(container), i+startNumber);
                 }
+                console.log(codes);
             }
         </script>
     </body>
